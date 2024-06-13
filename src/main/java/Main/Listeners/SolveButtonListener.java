@@ -1,7 +1,6 @@
 package Main.Listeners;
 
-import Main.CustomEventManager;
-import Main.EventType;
+import Main.GUI.ButtonEnum;
 import Main.GUI.ControlPanelComposite;
 import Main.MazeData.MazeBrowse;
 
@@ -18,7 +17,13 @@ public class SolveButtonListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        MazeBrowse.getInstance().solve();
-        CustomEventManager.getInstance().callEvent(EventType.solveBeginEvent);
+        MazeBrowse.getInstance().solve(controlPanelComposite);
+        controlPanelComposite.setButtonState(ButtonEnum.solveButton, false);
+        controlPanelComposite.setButtonState(ButtonEnum.chooseExitButton, false);
+        controlPanelComposite.setButtonState(ButtonEnum.chooseEntranceButton, false);
+        controlPanelComposite.setButtonState(ButtonEnum.chooseFileButton, false);
+        controlPanelComposite.setButtonState(ButtonEnum.writeFileButton, false);
+
+        controlPanelComposite.setStatusLabel("Rozpoczęto rozwiązywanie labiryntu", false);
     }
 }

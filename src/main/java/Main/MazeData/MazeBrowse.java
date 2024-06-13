@@ -1,8 +1,9 @@
 package Main.MazeData;
 
-import Main.CustomEventManager;
-import Main.EventType;
+import Main.GUI.ButtonEnum;
+import Main.GUI.ControlPanelComposite;
 
+import javax.swing.*;
 import java.util.*;
 
 public class MazeBrowse{
@@ -43,7 +44,10 @@ public class MazeBrowse{
         this.isSolved = false;
     }
 
-    private synchronized void clearRoute() //czyści ścieżkę w przypadku ponownego rozwiązania PO CO
+    /**
+     * czyści ścieżkę w przypadku ponownego rozwiązania PO CO
+     */
+    private synchronized void clearRoute()
     {
         for(byte[] arr : maze)
             for(int i = 0; i < width(); i++)
@@ -66,7 +70,7 @@ public class MazeBrowse{
         return maze.length;
     }
 
-    public synchronized void setExit(Coords newCoords) { //nowe współrzędne  wyjścia, sprawdza czy są w granicach labiryntu PO CO
+    public synchronized void setExit(Coords newCoords) { //nowe współrzędne  wyjścia, sprawdza czy są w granicach labiryntu
         if(newCoords.x >= width() || newCoords.y >= height()) {
             System.err.println("Error setting the exit location in the maze: " + newCoords.x + ", " + newCoords.y);
             return;
@@ -78,7 +82,7 @@ public class MazeBrowse{
         exit = newCoords;
     }
 
-    public synchronized void setEntry(Coords newCoords) { //nowe współrzędne  wejścia, sprawdza czy są w granicach labiryntu PO CO
+    public synchronized void setEntry(Coords newCoords) { //nowe współrzędne  wejścia, sprawdza czy są w granicach labiryntu
         if(newCoords.x >= width() || newCoords.y >= height()) {
             System.err.println("Error setting the exit location in the maze: " + newCoords.x + ", " + newCoords.y);
             return;
@@ -102,21 +106,21 @@ public class MazeBrowse{
         return exit;
     }
 
-    public synchronized String getSource() //zwraca aktualny plik źródłowy labiryntu  chyba????
+    public synchronized String getSource() //zwraca aktualny plik źródłowy labiryntu
     {
         return source;
     }
 
-    public synchronized void solve() //rozpoczyna rozwiązywanie w nowym wątku
+    public synchronized void solve(ControlPanelComposite controlPanelComposite) //rozpoczyna rozwiązywanie w nowym wątku
     {
         if(entry == null || exit == null)
             throw new RuntimeException("Cannot start solving while entrance / exit is null!");
 
-        Thread thread = new Thread(this::insideSolve);
+        Thread thread = new Thread(() -> insideSolve(controlPanelComposite));
         thread.start();
     }
 
-    private synchronized void insideSolve() //rozwiązany?
+    private synchronized void insideSolve(ControlPanelComposite controlPanelComposite)
     {
 
         int[][] intMaze = new int[maze.length][maze[0].length];
@@ -178,7 +182,7 @@ public class MazeBrowse{
         }
 
         if(!solveFlag) {
-            CustomEventManager.getInstance().callEvent(EventType.solveFinishEvent);
+            controlPanelComposite.setStatusLabel("Nie udało się znaleźć wyjścia z labiryntu! Spróbuj zmienić pozycję wejścia / wyjścia.", true);
             return;
         }
         Coords currCoords = exit;
@@ -224,7 +228,31 @@ public class MazeBrowse{
         }
 
         isSolved = true;
-        CustomEventManager.getInstance().callEvent(EventType.solveFinishEvent);
+        SwingUtilities.invokeLater(() -> {
+            controlPanelComposite.setButtonState(ButtonEnum.solveButton, true);
+            controlPanelComposite.setButtonState(ButtonEnum.chooseExitButton, true);
+            controlPanelComposite.setButtonState(ButtonEnum.chooseEntranceButton, true);
+            controlPanelComposite.setButtonState(ButtonEnum.chooseFileButton, true);
+            controlPanelComposite.setButtonState(ButtonEnum.writeFileButton, true);
+
+            String exitString;
+            String entryString;
+
+            if(getExit() == null)
+                exitString = "Brak";
+            else
+                exitString = getExit().toString();
+
+            if(getEntry() == null)
+                entryString = "Brak";
+            else
+                entryString = getEntry().toString();
+
+            controlPanelComposite.repaintMazeImage();
+            controlPanelComposite.setStatusLabel("<html>Znaleziono rozwiązanie labiryntu!" + "<table><tr><td>Szerokość: " + width() + "</td><td> Wejście: " + entryString +
+                        "</td></tr><tr><td>Wysokość: " + height() + "</td><td> Wyjście: " + exitString +
+                        "</td></tr></table>", false);
+        });
 
     }
 

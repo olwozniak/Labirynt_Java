@@ -4,10 +4,6 @@ import Main.GUI.ButtonEnum;
 import Main.GUI.ControlPanelComposite;
 import Main.Listeners.ListenerFactory;
 import Main.Listeners.MazeMouseActionListener;
-import Main.ActionObservers.ChangeCoordsObserver;
-import Main.ActionObservers.FileReadObserver;
-import Main.ActionObservers.SolveBeginObserver;
-import Main.ActionObservers.SolveFinishObserver;
 import javax.swing.*;
 import java.awt.*;
 
@@ -86,13 +82,6 @@ public final class ApplicationGUI {
         );
 
         controlPanelComposite.addMouseListener(new MazeMouseActionListener(controlPanelComposite));
-
-        CustomEventManager.getInstance().registerObserver(EventType.fileReadEvent, new FileReadObserver(controlPanelComposite));
-        CustomEventManager.getInstance().registerObserver(EventType.exitChangeEvent, new ChangeCoordsObserver(controlPanelComposite));
-        CustomEventManager.getInstance().registerObserver(EventType.entryChangeEvent, new ChangeCoordsObserver(controlPanelComposite));
-        CustomEventManager.getInstance().registerObserver(EventType.solveFinishEvent, new SolveFinishObserver(controlPanelComposite));
-        CustomEventManager.getInstance().registerObserver(EventType.solveBeginEvent, new SolveBeginObserver(controlPanelComposite));
-
     }
 
     public void start()

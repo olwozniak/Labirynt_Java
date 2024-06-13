@@ -46,7 +46,7 @@ public class BinaryFileHeader {
 
     BinaryFileHeader(MazeBrowse data) {
         if (data.getExit() == null || data.getEntry() == null)
-            throw new RuntimeException("Binary file without entry / exit");
+            throw new RuntimeException("Brak wejścia / wyjscia");
 
         fileId = 0x52524243;
         esc = 0x1B;

@@ -1,8 +1,6 @@
 package Main.Listeners;
 
 import Main.MazeData.Coords;
-import Main.CustomEventManager;
-import Main.EventType;
 import Main.GUI.ButtonEnum;
 import Main.GUI.ControlPanelComposite;
 import Main.MazeData.MazeBrowse;
@@ -40,7 +38,20 @@ public class MazeMouseActionListener extends MouseInputAdapter {
 
             data.setEntry(newCoords);
 
-            CustomEventManager.getInstance().callEvent(EventType.entryChangeEvent);
+            controlPanelComposite.repaintMazeImage();
+
+            String exitString;
+            String entryString = newCoords.toString();
+
+            if(data.getExit() == null)
+                exitString = "Brak";
+            else
+                exitString = data.getExit().toString();
+
+
+            controlPanelComposite.setStatusLabel("<html>" + "<table><tr><td>Szerokość: " + data.width() + "</td><td> Wejście: " + entryString +
+                    "</td></tr><tr><td>Wysokość: " + data.height() + "</td><td> Wyjście: " + exitString +
+                    "</td></tr></table>", false);
 
         }
         else if (controlPanelComposite.isChoosingExit())
@@ -55,7 +66,19 @@ public class MazeMouseActionListener extends MouseInputAdapter {
 
             data.setExit(newCoords);
 
-            CustomEventManager.getInstance().callEvent(EventType.exitChangeEvent);
+            controlPanelComposite.repaintMazeImage();
+
+            String exitString = newCoords.toString();
+            String entryString;
+
+            if(data.getEntry() == null)
+                entryString = "Brak";
+            else
+                entryString = data.getEntry().toString();
+
+            controlPanelComposite.setStatusLabel("<html>" + "<table><tr><td>Szerokość: " + data.width() + "</td><td> Wejście: " + entryString +
+                    "</td></tr><tr><td>Wysokość: " + data.height() + "</td><td> Wyjście: " + exitString +
+                    "</td></tr></table>", false);
 
         }
 

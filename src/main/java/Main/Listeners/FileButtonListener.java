@@ -1,9 +1,9 @@
 package Main.Listeners;
 
-import Main.CustomEventManager;
-import Main.EventType;
 import Main.File.MazeFileReader;
+import Main.GUI.ButtonEnum;
 import Main.GUI.ControlPanelComposite;
+import Main.MazeData.MazeBrowse;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -43,7 +43,36 @@ class FileButtonListener implements ActionListener {
             else {
                 MazeFileReader.readTxtToMazeData(currentFile);
             }
-            CustomEventManager.getInstance().callEvent(EventType.fileReadEvent);
+
+            MazeBrowse data = MazeBrowse.getInstance();
+
+            controlPanelComposite.getFilenameLabel().setText("Źródło: " + currentFile.getName());
+
+            controlPanelComposite.changeMazeImage();
+
+            String exitString;
+            String entryString;
+
+            if(data.getExit() == null)
+                exitString = "Brak";
+            else
+                exitString = data.getExit().toString();
+
+            if(data.getEntry() == null)
+                entryString = "Brak";
+            else
+                entryString = data.getEntry().toString();
+
+            controlPanelComposite.setStatusLabel("<html>Odczytano labirynt z: " + data.getSource() + "<br/>" +
+                    "<table><tr><td>Szerokość: " + data.width() + "</td><td> Wejście: " + entryString +
+                    "</td></tr><tr><td>Wysokość: " + data.height() + "</td><td> Wyjście: " + exitString +
+                    "</td></tr></table>", false);
+
+            controlPanelComposite.setButtonState(ButtonEnum.chooseEntranceButton, true);
+            controlPanelComposite.setButtonState(ButtonEnum.chooseExitButton, true);
+            controlPanelComposite.setButtonState(ButtonEnum.writeFileButton, true);
+
+            controlPanelComposite.setButtonState(ButtonEnum.solveButton, data.getExit() != null && data.getEntry() != null);
 
         } catch (IOException ex) {
             controlPanelComposite.setStatusLabel("Błąd IO podczas czytania z pliku: " + ex.getClass().getName(), true);
