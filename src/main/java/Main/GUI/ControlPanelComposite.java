@@ -20,7 +20,6 @@ public final class ControlPanelComposite {
     {
         isChoosingEntry = false;
         isChoosingExit = false;
-
         this.statusLabelPanel = new StatusLabelPanel();
         this.buttonPanelComposite = new ButtonPanelComposite();
 

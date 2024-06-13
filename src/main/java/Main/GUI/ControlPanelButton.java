@@ -8,8 +8,8 @@ class ControlPanelButton extends JButton {
     ControlPanelButton(String name, ImageIcon icon)
     {
         super(name);
-        setFont(new Font("Serif", Font.PLAIN, 16));
+        setFont(new Font("Helvetica", Font.BOLD, 16));
         setIcon(icon);
-        setForeground(Color.WHITE);
+        setForeground(new Color(8, 13, 42));
     }
 }

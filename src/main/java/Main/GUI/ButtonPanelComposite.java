@@ -1,9 +1,12 @@
 package Main.GUI;
 
+import Main.Listeners.ChooseExitButtonListener;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.util.Objects;
 
 public class ButtonPanelComposite {
@@ -23,28 +26,55 @@ public class ButtonPanelComposite {
         }
     }
 
+    private Image scaleImage(Image image, int width, int height) {
+        BufferedImage scaledImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D graphics2D = scaledImage.createGraphics();
+        graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        graphics2D.drawImage(image, 0, 0, width, height, null);
+        graphics2D.dispose();
+        return scaledImage;
+    }
+
     ButtonPanelComposite(){
         Image solveImage = loadIcon("accept.png");
         Image exitImage = loadIcon("exit.png");
-        Image entryImage = loadIcon("log_in.png");
-        Image folderImage = loadIcon("folder.png");
+        Image entryImage = loadIcon("entrance.png");
+        Image labiryntImage = loadIcon("labirynt.png");
         Image writingImage = loadIcon("writing.png");
 
-        this.controlJPanel = new JPanel();
+        solveImage = scaleImage(solveImage, 20, 20);
+        exitImage = scaleImage(exitImage, 20, 20);
+        entryImage = scaleImage(entryImage, 20, 20);
+        labiryntImage = scaleImage(labiryntImage, 20, 20);
+        writingImage = scaleImage(writingImage, 20, 20);
 
-        this.chooseFileButton = new ControlPanelButton(" Wybierz plik", new ImageIcon(folderImage));
-        this.chooseExitButton = new ControlPanelButton(" Wybierz wyjście", new ImageIcon(exitImage));
-        this.chooseEntranceButton = new ControlPanelButton(" Wybierz wejście", new ImageIcon(entryImage));
-        this.solveButton = new ControlPanelButton(" Rozwiąż", new ImageIcon(solveImage));
-        this.writeFileButton = new ControlPanelButton(" Wypisz labirynt", new ImageIcon(writingImage));
+        this.controlJPanel = new JPanel();
+        this.controlJPanel.setBackground(new Color(150, 200, 200));
+
+        this.chooseFileButton = new ControlPanelButton(" WYBIERZ LABIRYNT", new ImageIcon(labiryntImage));
+        this.chooseExitButton = new ControlPanelButton(" WYBIERZ WYJŚCIE", new ImageIcon(exitImage));
+        this.chooseEntranceButton = new ControlPanelButton(" WYBIERZ WEJŚCIE", new ImageIcon(entryImage));
+        this.solveButton = new ControlPanelButton(" ROZWIĄŻ", new ImageIcon(solveImage));
+        this.writeFileButton = new ControlPanelButton(" WYPISZ LABIRYNT", new ImageIcon(writingImage));
+
+        setBackgroundColor(chooseFileButton);
+        setBackgroundColor(chooseExitButton);
+        setBackgroundColor(chooseEntranceButton);
+        setBackgroundColor(solveButton);
+        setBackgroundColor(writeFileButton);
 
         this.fileNameLabel = new JLabel("Wybrany plik nie istnieje");
         this.fileNameLabel.setOpaque(true);
         this.fileNameLabel.setBackground(new Color(8, 13, 42));
         this.fileNameLabel.setHorizontalAlignment(0);
-        this.fileNameLabel.setFont(new Font("Serif", Font.BOLD, 18));
+        this.fileNameLabel.setFont(new Font("Helvetica", Font.BOLD, 18));
+        this.fileNameLabel.setForeground(Color.WHITE);
 
         setGrid();
+    }
+
+    private void setBackgroundColor(JButton button) {
+        button.setBackground(new Color(8, 13, 42));
     }
 
     private void setGrid()
@@ -104,7 +134,6 @@ public class ButtonPanelComposite {
             case writeFileButton -> this.writeFileButton.setEnabled(state);
         }
     }
-
 
     void setButtonListener(ButtonEnum button, ActionListener listener)
     {

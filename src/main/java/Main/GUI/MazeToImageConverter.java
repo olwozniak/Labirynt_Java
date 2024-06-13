@@ -26,13 +26,13 @@ public class MazeToImageConverter {
 
     private static Color getColorForCell(MazeBrowse data, Coords coords, int row, int col) {
         if (coords.equals(data.getEntry())) {
-            return new Color(30, 10, 30);  // Wejście
+            return new Color(250, 190, 190);  // Wejście
         } else if (coords.equals(data.getExit())) {
-            return new Color(10, 100, 100);   // Wyjście
+            return new Color(200, 190, 230);   // Wyjście
         } else if (data.getMaze()[row][col] == MazeBrowse.Wall) {
             return new Color(8, 13, 42);            // Sciany
         } else if (data.getMaze()[row][col] == MazeBrowse.Route) {
-            return new Color(189, 153, 59); // Trasy
+            return new Color(150, 200, 200); // Trasy
         } else {
             return Color.WHITE;             // Pustego pola
         }

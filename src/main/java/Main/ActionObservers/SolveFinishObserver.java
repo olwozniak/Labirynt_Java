@@ -41,7 +41,7 @@ public class SolveFinishObserver extends GuiObserver{
         else
             entryString = data.getEntry().toString();
 
-
+/*
         if(!data.isSolved())
             controlPanelComposite.setStatusLabel("Nie udało się znaleźć wyjścia z labiryntu! Spróbuj zmienić pozycję wejścia / wyjścia.", true);
         else {
@@ -50,5 +50,7 @@ public class SolveFinishObserver extends GuiObserver{
                     "</td></tr><tr><td>Wysokość: " + data.height() + "</td><td> Wyjście: " + exitString +
                     "</td></tr></table>", false);
         }
+        */
     }
+
 }
